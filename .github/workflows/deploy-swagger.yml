@@ -2,7 +2,8 @@ name: Deploy Swagger UI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main", "merge/FE-BE" ] # Added current active branch for compatibility
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,28 +25,35 @@ jobs:
 
       - name: Restore tools
         run: dotnet tool restore
+        working-directory: Backend
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore VSTEP_Writing_System.slnx
+        working-directory: Backend
 
       - name: Build project
-        run: dotnet build --configuration Release
+        run: dotnet build VSTEP_Writing_System.slnx --configuration Release --no-restore
+        working-directory: Backend
 
       - name: Generate swagger.json
         run: |
+          mkdir -p docs # Ensure docs folder exists
+          export PATH="$PATH:$HOME/.dotnet/tools"
           dotnet swagger tofile \
           --output docs/swagger.json \
           src/API/bin/Release/net8.0/API.dll v1
+        working-directory: Backend
+        env:
+          ASPNETCORE_ENVIRONMENT: Development # Ensure Swagger is enabled during generation
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: Backend/docs
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
