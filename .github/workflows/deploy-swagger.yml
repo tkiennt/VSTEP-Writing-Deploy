@@ -2,7 +2,7 @@ name: Deploy Swagger UI
 
 on:
   push:
-    branches: [ "main", "merge/FE-BE" ] # Added current active branch for compatibility
+    branches: ["main"] # Added current active branch for compatibility
   workflow_dispatch:
 
 permissions:
