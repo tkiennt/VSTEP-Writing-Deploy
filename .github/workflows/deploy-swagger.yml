@@ -45,6 +45,12 @@ jobs:
         working-directory: Backend
         env:
           ASPNETCORE_ENVIRONMENT: Development # Ensure Swagger is enabled during generation
+          # Provide dummy values to satisfy startup requirements in Program.cs
+          Jwt__SecretKey: "TemporarySecretKeyForGeneratingSwagger12345!"
+          ConnectionStrings__PoolerConnection: "Host=localhost;Database=dummy;Username=postgres;Password=dummy"
+          Supabase__Url: "https://example.supabase.co"
+          Supabase__AnonKey: "dummy-key"
+          Supabase__ServiceRoleKey: "dummy-key"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

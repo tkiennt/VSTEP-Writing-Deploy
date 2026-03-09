@@ -73,7 +73,7 @@ public class TopicsController : ControllerBase
         {
             PartId = request.PartId,
             Title = request.Title,
-            Prompt = request.Prompt,
+            Prompt = request.Prompt ?? string.Empty,
             Purpose = request.Purpose,
             RecipientRole = request.RecipientRole,
             LevelId = request.LevelId
@@ -90,7 +90,7 @@ public class TopicsController : ControllerBase
         if (existing == null) return NotFound();
         existing.PartId = request.PartId;
         existing.Title = request.Title;
-        existing.Prompt = request.Prompt;
+        existing.Prompt = request.Prompt ?? string.Empty;
         existing.Purpose = request.Purpose;
         existing.RecipientRole = request.RecipientRole;
         existing.LevelId = request.LevelId;
